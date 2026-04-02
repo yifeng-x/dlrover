@@ -143,6 +143,7 @@ def _build_master_args_parser():
         type=str,
         help="The configmap manual scale switch, should be 'on' or 'off'",
     )
+    
     return parser
 
 

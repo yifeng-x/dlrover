@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,7 +24,7 @@ spec:
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
         - --v=0
-        image: docker.io/kubebuilder/kube-rbac-proxy:v0.13.1 # replace image
+        image: "{{ .Values.rbacProxy.image.name }}:{{ .Values.rbacProxy.image.tag }}" # replace image
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443
@@ -45,10 +46,10 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
-        - --master-image=dlrover-master:v0.7.0 # # replace image
+        - --master-image={{ .Values.dlroverMaster.image.name }}:{{ .Values.dlroverMaster.image.tag }} # replace image
         command:
         - /manager
-        image: "dlrover-controller-manager:master" # replace image
+        image: "{{ .Values.controller.image.name }}:{{ .Values.controller.image.tag }}" # replace image
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:

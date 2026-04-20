@@ -114,9 +114,35 @@ spec:
 
 #### Run the installation command in the dlrover/helm_install/ directory
 When installing the new version, use --create-namespace to specify if the namespace does not exist; it can be omitted if the namespace already exists.
+
+##### Use default values to deploy
 ```shell
-helm install dlrover . --create-namespace -n dlrover --generate-name --wait
+# Use --generate-name to automatically generate a unique release name.
+helm install . \
+  --generate-name \
+  --wait \
+  -n your-namespace \
+  --set controller.image.name=elasticjob-controller \
+  --set controller.image.tag=master \
+  --set dlroverMaster.image.name=dlrover-master \
+  --set dlroverMaster.image.tag=v0.7.0
+
+# Custom release name.
+helm install dlrover-test . \
+  --wait \
+  -n your-namespace \
+  --set controller.image.name=elasticjob-controller \
+  --set controller.image.tag=master \
+  --set dlroverMaster.image.name=dlrover-master \
+  --set dlroverMaster.image.tag=v0.7.0
 ```
 
+##### Use custom values to deploy
+```shell
+helm install dlrover-test . \ 
+  -f ./custom-values.yaml \ 
+  --create-namespace -n dlrover \ 
+  --wait
+```
 
 ## Check the Deployment Result

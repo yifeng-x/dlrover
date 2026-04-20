@@ -1,3 +1,4 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -79,6 +80,7 @@ rules:
   - get
   - patch
   - update
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -89,6 +91,7 @@ rules:
   - /metrics
   verbs:
   - get
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

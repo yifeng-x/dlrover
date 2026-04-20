@@ -65,7 +65,6 @@ def check_all_rank_ready(group: dist.ProcessGroup, ready: bool):
         return ready
     backend = dist.get_backend(group)
     local_rank = env_utils.get_local_rank()
-    #device = "cpu" if backend == "gloo" else f"cuda:{local_rank}"
     device = get_device_by_backend(backend, local_rank)
     rt = ReadyTensor.singleton_instance(device)
     value = 0 if ready else 1
@@ -83,7 +82,6 @@ def verify_all_rank_step_consistent(group: dist.ProcessGroup, step):
         return True
     backend = dist.get_backend(group)
     local_rank = env_utils.get_local_rank()
-    # device = "cpu" if backend == "gloo" else f"cuda:{local_rank}"
     device = get_device_by_backend(backend, local_rank)
     t = torch.tensor([float(step)]).to(device)
     if group:
@@ -107,8 +105,11 @@ def get_device_by_backend(backend: str = None, local_rank: int = None):
             return f"cuda:{local_rank}"
         if backend == BackendType.HCCL:
             return f"npu:{local_rank}"
-    except:
-        logger.warning(f"invalid backend, will use gloo backend.")
+        
+        logger.warning(f"Invalid backend, will use gloo backend.")
+        return "cpu"
+    except Exception as e:
+        logger.error("Get device failed: {e}")
         return "cpu"
 
 def timer(func):
